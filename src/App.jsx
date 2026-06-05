@@ -42,7 +42,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 .tabs { display: flex; gap: 4px; padding: 12px var(--px); background: var(--bg); }
 .tab { flex: 1; padding: 9px 0; border-radius: var(--radius-sm); border: 1px solid var(--border); background: transparent; color: var(--text2); font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; transition: all .18s; }
 .tab.active { background: var(--accent); color: #0a0a0a; border-color: var(--accent); font-weight: 600; }
-.hero { padding: 20px var(--px) 12px; }
+.hero { padding: 20px 0 12px; }
 .hero-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 .hero-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 16px; }
 .hero-card.accent { background: var(--accent); border-color: var(--accent); }
@@ -68,11 +68,12 @@ circle.fg { fill: none; stroke: var(--accent); stroke-width: 5; stroke-linecap: 
 .ring-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
 .ring-body { font-size: 13px; color: var(--text2); line-height: 1.5; }
 .ring-body strong { color: var(--text); font-weight: 500; }
-.next-banner { margin: 0 var(--px) 10px; background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius); padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; }
+.next-banner { margin: 0 0 10px; background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius); padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; }
 .next-label { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--text3); margin-bottom: 3px; font-weight: 500; }
 .next-date { font-size: 16px; font-weight: 500; color: var(--text); }
 .next-pill { background: rgba(200,245,66,0.12); color: var(--accent); font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 20px; }
-.blocks-section { padding: 0 var(--px); }
+.page-content { padding: 0 var(--px); }
+.blocks-section { padding: 0; }
 .section-head { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--text3); margin: 16px 0 10px; }
 .block-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; transition: border-color .2s; }
 .block-card.active-block { border-color: var(--border2); }
@@ -123,7 +124,7 @@ circle.fg { fill: none; stroke: var(--accent); stroke-width: 5; stroke-linecap: 
 .note-hint { font-size: 10px; color: var(--text3); display: flex; justify-content: space-between; margin-top: 4px; }
 .add-block-btn { width: 100%; padding: 13px; border-radius: var(--radius); border: 1.5px dashed var(--border2); background: transparent; color: var(--text3); font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: all .18s; margin-top: 4px; }
 .add-block-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(200,245,66,0.04); }
-.history-section { padding: 0 var(--px); }
+.history-section { padding: 0; }
 .history-empty { text-align: center; padding: 60px 20px; color: var(--text3); font-size: 14px; }
 .h-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 13px 0; border-bottom: 1px solid var(--border); gap: 10px; }
 .h-date { font-size: 14px; color: var(--text); }
@@ -134,7 +135,7 @@ circle.fg { fill: none; stroke: var(--accent); stroke-width: 5; stroke-linecap: 
 .h-skipped { background: rgba(255,77,77,0.12); color: var(--red); }
 .h-payment { background: rgba(200,245,66,0.2); color: var(--accent); }
 .h-rescheduled { background: rgba(251,146,60,0.12); color: var(--orange); }
-.settings-section { padding: 0 var(--px); }
+.settings-section { padding: 0; }
 .settings-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 10px; margin-top: 4px; }
 .settings-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text); margin-bottom: 6px; }
 .settings-desc { font-size: 13px; color: var(--text2); margin-bottom: 14px; line-height: 1.5; }
@@ -148,7 +149,7 @@ circle.fg { fill: none; stroke: var(--accent); stroke-width: 5; stroke-linecap: 
 .import-area::placeholder { color: var(--text3); }
 .toast-global { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--surface2); border: 1px solid var(--border2); border-radius: 20px; padding: 10px 20px; font-size: 13px; color: var(--accent); z-index: 100; pointer-events: none; animation: fadeUp .2s ease; white-space: nowrap; }
 @keyframes fadeUp { from { opacity: 0; transform: translateX(-50%) translateY(8px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
-.legend-row { display: flex; gap: 14px; padding: 0 var(--px) 4px; flex-wrap: wrap; }
+.legend-row { display: flex; gap: 14px; padding: 0 0 4px; flex-wrap: wrap; }
 .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text3); }
 .legend-dot { width: 9px; height: 9px; border-radius: 50%; }
 .log-section { padding: 0 var(--px); }
@@ -498,7 +499,7 @@ export default function App() {
         </div>
 
         {tab === "overview" && (
-          <>
+          <div className="page-content">
             <div className="hero">
               <div className="hero-row">
                 <div className="hero-card accent">
@@ -556,10 +557,11 @@ export default function App() {
               {blocks.filter((bl, bi) => showOnOverview(bl, bi))
                 .map((bl) => <BlockCard key={bl.id} block={bl} bi={bl.id} highlight />)}
             </div>
-          </>
+          </div>
         )}
 
         {tab === "blocks" && (
+          <div className="page-content">
           <div className="blocks-section">
             <div className="legend-row" style={{ marginBottom: 10, marginTop: 8 }}>
               <div className="legend-item"><div className="legend-dot" style={{ background: "#c8f542" }} />Done</div>
@@ -574,9 +576,11 @@ export default function App() {
               + Add new block
             </button>
           </div>
+          </div>
         )}
 
         {tab === "history" && (
+          <div className="page-content">
           <div className="history-section">
             <div className="section-head" style={{ marginTop: 16 }}>Activity log</div>
             {history.length === 0 && <div className="history-empty">No activity yet. Go crush a session!</div>}
@@ -593,9 +597,11 @@ export default function App() {
               </div>
             ))}
           </div>
+          </div>
         )}
 
         {tab === "settings" && (
+          <div className="page-content">
           <div className="settings-section">
             <div className="section-head" style={{ marginTop: 16 }}>Backup</div>
             <div className="settings-card">
@@ -625,6 +631,7 @@ export default function App() {
               <button className="submit-btn" onClick={submitLog} disabled={!logDate}>Save session</button>
               <div className="toast">{logToast}</div>
             </div>
+          </div>
           </div>
         )}
 
