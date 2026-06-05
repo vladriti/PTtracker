@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<title>TrainTrack</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0f;color:#e8e4dc;font-family:'DM Sans',sans-serif;min-height:100vh;-webkit-tap-highlight-color:transparent}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:#111}::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+
+.app{max-width:480px;margin:0 auto;padding-bottom:40px}
+.header{padding:28px 20px 0;display:flex;justify-content:space-between;align-items:flex-start}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;line-height:1}
+.logo span{color:#c8f060}
+.subtitle{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#555;margin-top:3px}
+.nav{display:flex;gap:6px;padding:18px 20px}
+.nav-btn{padding:7px 16px;border-radius:100px;border:1px solid #222;background:transparent;color:#888;font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.nav-btn.active{background:#c8f060;color:#0a0a0f;border-color:#c8f060;font-weight:500}
+.nav-btn:active{opacity:.7}
+.content{padding:4px 20px 40px}
+
+/* Hero banner */
+.hero{background:linear-gradient(135deg,#131a0a 0%,#0e1318 100%);border:1px solid #1e2a10;border-radius:16px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden}
+.hero::after{content:'💪';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:48px;opacity:.08}
+.hero-duration{font-family:'Bebas Neue',sans-serif;font-size:26px;color:#c8f060;line-height:1.1}
+.hero-sub{font-size:11px;color:#4a6a2a;letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+.hero-since{font-size:11px;color:#3a5a1a;margin-top:6px}
+
+/* Stats */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.stat-card{background:#111318;border:1px solid #1e2028;border-radius:14px;padding:14px}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:30px;color:#c8f060;line-height:1}
+.stat-lbl{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#555;margin-top:4px}
+
+/* Block card */
+.block-card{background:#111318;border:1px solid #1e2028;border-radius:16px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden}
+.block-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#c8f060,transparent)}
+.block-card.paid::before{background:linear-gradient(90deg,#3a8a5a,transparent)}
+.block-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.block-cost{font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8e4dc}
+.block-meta{font-size:11px;color:#555;margin-top:2px}
+.badge{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:100px}
+.badge-paid{background:#1a3a2a;color:#3a8a5a;border:1px solid #2a5a3a}
+.badge-unpaid{background:#2a1a0a;color:#c87830;border:1px solid #5a3a1a}
+
+/* Payment date row */
+.payment-row{display:flex;align-items:center;gap:8px;background:#0e0e14;border:1px solid #1e2028;border-radius:10px;padding:8px 12px;margin-bottom:14px}
+.payment-row-label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#555;white-space:nowrap}
+.payment-date-input{background:transparent;border:none;color:#c8f060;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;outline:none;cursor:pointer;flex:1}
+.payment-date-input::-webkit-calendar-picker-indicator{opacity:.4;cursor:pointer;filter:invert(1)}
+
+/* Progress */
+.progress-bar{height:4px;background:#1e2028;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#c8f060,#a0d040);border-radius:2px;transition:width .4s ease}
+
+/* Sessions grid */
+.sessions-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px}
+.session-slot{border-radius:10px;border:1px solid #1e2028;background:#141418;overflow:hidden;transition:transform .1s}
+.session-slot:active{transform:scale(.97)}
+.session-top{padding:10px 6px 6px;text-align:center;cursor:pointer;min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.session-slot.done .session-top{background:#1a2e0a;border-bottom:1px solid #2a4a1a}
+.session-slot.done{border-color:#3a6a1a}
+.session-num{font-size:9px;letter-spacing:1px;color:#555;text-transform:uppercase;margin-bottom:2px}
+.session-check{font-size:20px;margin:2px 0}
+.session-date-lbl{font-size:9px;color:#666;margin-top:1px;line-height:1.2;text-align:center}
+.session-date-row{border-top:1px solid #1e2028;padding:5px 4px;display:flex;align-items:center;justify-content:center;gap:3px;cursor:pointer}
+.session-slot.done .session-date-row{border-color:#2a4a1a}
+.session-date-input{background:transparent;border:none;color:#777;font-family:'DM Sans',sans-serif;font-size:10px;width:100%;text-align:center;cursor:pointer;padding:0;outline:none}
+.session-date-input::-webkit-calendar-picker-indicator{opacity:.3;width:10px;height:10px;cursor:pointer}
+
+/* Block actions */
+.block-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:9px 16px;border-radius:10px;border:none;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .15s;font-weight:500}
+.btn-primary{background:#c8f060;color:#0a0a0f}
+.btn-primary:active{background:#d8ff70}
+.btn-ghost{background:transparent;color:#555;border:1px solid #1e2028}
+.btn-ghost:active{color:#888}
+.btn-danger{background:transparent;color:#a03030;border:1px solid #2a1010;font-size:11px}
+.btn-sm{padding:6px 12px;font-size:11px}
+
+/* Form */
+.form-card{background:#111318;border:1px solid #1e2028;border-radius:16px;padding:22px}
+.form-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:20px}
+.form-group{margin-bottom:16px}
+.form-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#555;margin-bottom:6px;display:block}
+.form-input{width:100%;background:#0e0e14;border:1px solid #1e2028;border-radius:10px;padding:11px 14px;color:#e8e4dc;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.form-input:focus{border-color:#c8f060}
+.form-hint{font-size:11px;color:#444;margin-top:5px}
+.form-note{background:#0e1a08;border:1px solid #2a4a1a;border-radius:10px;padding:12px;font-size:11px;color:#4a7a2a;line-height:1.7;margin-bottom:16px}
+
+/* Settings */
+.settings-card{background:#111318;border:1px solid #1e2028;border-radius:14px;padding:18px;margin-bottom:12px}
+.settings-row{display:flex;justify-content:space-between;align-items:center}
+.settings-title{font-size:13px;font-weight:500;margin-bottom:3px}
+.settings-desc{font-size:11px;color:#555;line-height:1.6}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a24;border:1px solid #2e2e3e;color:#e8e4dc;padding:11px 20px;border-radius:100px;font-size:13px;z-index:999;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.5);animation:toastIn .25s ease;pointer-events:none}
+.toast.error{border-color:#3a1a1a;color:#c87070}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+.empty{text-align:center;padding:48px 20px}
+.empty-icon{font-size:48px;margin-bottom:12px;opacity:.35}
+.empty-text{color:#444;font-size:13px}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;color:#666;margin-bottom:10px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div>
+      <div class="logo">TRAIN<span>TRACK</span></div>
+      <div class="subtitle">Personal Trainer Sessions</div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nav-btn active" onclick="showView('dashboard')">Dashboard</button>
+    <button class="nav-btn" onclick="showView('add')">+ New Block</button>
+    <button class="nav-btn" onclick="showView('settings')">⚙ Settings</button>
+  </div>
+  <div class="content" id="content"></div>
+</div>
+<div class="toast" id="toast" style="display:none"></div>
+
+<script>
+// ── State ────────────────────────────────────────────────────────────────────
+const STORE = 'traintrack-v2';
+let state = load();
+let currentView = 'dashboard';
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(STORE)) || dflt(); } catch { return dflt(); }
+}
+function dflt() { return { blocks: [], reminderDays: 2, notifEnabled: false }; }
+function save() { localStorage.setItem(STORE, JSON.stringify(state)); }
+
+function today() { return new Date().toISOString().split('T')[0]; }
+
+function fmtDate(d) {
+  if (!d) return '—';
+  const dt = new Date(d + 'T00:00:00');
+  return dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+// ── Duration helper ───────────────────────────────────────────────────────────
+function trainingDuration() {
+  // Find the earliest session date across all blocks
+  let earliest = null;
+  for (const b of state.blocks) {
+    for (const s of b.sessions) {
+      if (s.done && s.date) {
+        if (!earliest || s.date < earliest) earliest = s.date;
+      }
+    }
+    // Also consider block creation date as fallback
+    if (b.createdAt && (!earliest || b.createdAt < earliest)) earliest = b.createdAt;
+  }
+  if (!earliest) return null;
+
+  const start = new Date(earliest + 'T00:00:00');
+  const now = new Date();
+  const diffMs = now - start;
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffDays < 7) return diffDays === 0 ? 'Day 1' : `${diffDays} days`;
+  if (diffDays < 30) {
+    const weeks = Math.floor(diffDays / 7);
+    const days = diffDays % 7;
+    return days > 0 ? `${weeks}w ${days}d` : `${weeks} week${weeks>1?'s':''}`;
+  }
+  const months = Math.floor(diffDays / 30.44);
+  const remDays = diffDays - Math.round(months * 30.44);
+  if (remDays >= 25) return `${months + 1} months`;
+  if (remDays >= 20) return `${months} months and a half`;
+  if (remDays >= 10) return `${months} months and ${Math.round(remDays/7)} week${Math.round(remDays/7)>1?'s':''}`;
+  return `${months} month${months>1?'s':''}`;
+}
+
+// ── Toast ────────────────────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg, err) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast' + (err ? ' error' : '');
+  el.style.display = 'block';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.style.display = 'none', 3000);
+}
+
+// ── Views ────────────────────────────────────────────────────────────────────
+function showView(v) {
+  currentView = v;
+  document.querySelectorAll('.nav-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['dashboard','add','settings'][i] === v);
+  });
+  render();
+}
+
+function render() {
+  const el = document.getElementById('content');
+  if (currentView === 'dashboard') el.innerHTML = renderDashboard();
+  else if (currentView === 'add') el.innerHTML = renderAdd();
+  else el.innerHTML = renderSettings();
+}
+
+// ── Dashboard ────────────────────────────────────────────────────────────────
+function renderDashboard() {
+  const totalSess = state.blocks.reduce((s, b) => s + b.sessions.filter(x => x.done).length, 0);
+  const unpaid = state.blocks.filter(b => !b.paid).length;
+  const spent = state.blocks.filter(b => b.paid).reduce((s, b) => s + b.cost, 0);
+  const duration = trainingDuration();
+
+  const active = state.blocks.filter(b => !b.paid || b.sessions.some(s => !s.done));
+  const done = state.blocks.filter(b => b.paid && b.sessions.every(s => s.done));
+
+  // Find earliest date for "since" label
+  let sinceDate = null;
+  for (const b of state.blocks) {
+    if (b.createdAt && (!sinceDate || b.createdAt < sinceDate)) sinceDate = b.createdAt;
+  }
+
+  return `
+  ${duration ? `
+  <div class="hero">
+    <div class="hero-duration">${duration}</div>
+    <div class="hero-sub">Training streak</div>
+    ${sinceDate ? `<div class="hero-since">Started ${fmtDate(sinceDate)}</div>` : ''}
+  </div>` : ''}
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-val">${totalSess}</div><div class="stat-lbl">Sessions done</div></div>
+    <div class="stat-card"><div class="stat-val">${state.blocks.length}</div><div class="stat-lbl">Blocks total</div></div>
+    <div class="stat-card"><div class="stat-val">${spent}</div><div class="stat-lbl">RON spent</div></div>
+  </div>
+
+  ${state.blocks.length === 0 ? `<div class="empty"><div class="empty-icon">💪</div><div class="empty-text">No blocks yet.<br>Add your first one above.</div></div>` : ''}
+  ${active.length ? `<div class="section-title">Active Blocks</div>${active.map(b => renderBlock(b)).join('')}` : ''}
+  ${done.length ? `<div class="section-title" style="margin-top:20px">Completed</div>${done.map(b => renderBlock(b, true)).join('')}` : ''}
+  `;
+}
+
+function renderBlock(b, faded) {
+  const doneCount = b.sessions.filter(s => s.done).length;
+  const pct = (doneCount / 8) * 100;
+
+  const sessions = b.sessions.map((s, i) => `
+    <div class="session-slot ${s.done ? 'done' : ''}" id="slot-${b.id}-${i}">
+      <div class="session-top" onclick="toggleSession('${b.id}',${i})">
+        <div class="session-num">#${i+1}</div>
+        <div class="session-check">${s.done ? '✓' : '○'}</div>
+        ${s.done && s.date ? `<div class="session-date-lbl">${fmtDate(s.date).replace(/\s\d{4}/,'')}</div>` : ''}
+      </div>
+      <div class="session-date-row" title="Change date">
+        <input type="date" class="session-date-input" value="${s.date || ''}"
+          onchange="changeDate('${b.id}',${i},this.value)"
+          title="Set date for session ${i+1}"/>
+      </div>
+    </div>
+  `).join('');
+
+  // Payment date row — always visible, editable
+  const paymentRow = `
+    <div class="payment-row">
+      <span class="payment-row-label">💳 Payment date</span>
+      <input type="date" class="payment-date-input"
+        value="${b.paidOn || ''}"
+        onchange="changePaymentDate('${b.id}', this.value)"
+        title="Set or edit payment date"/>
+      ${b.paidOn ? `<span style="font-size:10px;color:#3a8a5a">✓ ${fmtDate(b.paidOn)}</span>` : `<span style="font-size:10px;color:#555">not set</span>`}
+    </div>`;
+
+  return `
+  <div class="block-card ${b.paid ? 'paid' : ''}" style="${faded ? 'opacity:.65' : ''}">
+    <div class="block-header">
+      <div>
+        <div class="block-cost">${b.cost} RON</div>
+        <div class="block-meta">${b.label || 'Training block'} · ${doneCount}/8 sessions</div>
+      </div>
+      ${b.paid ? `<span class="badge badge-paid">✓ Paid</span>` : `<span class="badge badge-unpaid">⚡ Unpaid</span>`}
+    </div>
+    ${paymentRow}
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="sessions-grid">${sessions}</div>
+    <div class="block-actions">
+      ${!b.paid ? `<button class="btn btn-primary btn-sm" onclick="markPaid('${b.id}')">Mark Paid</button>` : ''}
+      <button class="btn btn-ghost btn-sm" onclick="deleteBlock('${b.id}')">Remove</button>
+    </div>
+  </div>`;
+}
+
+// ── Session toggle ────────────────────────────────────────────────────────────
+function toggleSession(blockId, idx) {
+  const block = state.blocks.find(b => b.id === blockId);
+  if (!block) return;
+  const s = block.sessions[idx];
+  if (s.done) {
+    s.done = false; s.date = '';
+  } else {
+    s.done = true;
+    if (!s.date) s.date = today();
+  }
+  save(); render();
+}
+
+function changeDate(blockId, idx, val) {
+  const block = state.blocks.find(b => b.id === blockId);
+  if (!block) return;
+  block.sessions[idx].date = val;
+  save(); render();
+}
+
+// ── Payment date ──────────────────────────────────────────────────────────────
+function changePaymentDate(blockId, val) {
+  const block = state.blocks.find(b => b.id === blockId);
+  if (!block) return;
+  block.paidOn = val;
+  // If a date is set, also mark as paid; if cleared, reflect that
+  if (val) { block.paid = true; }
+  save(); render();
+  if (val) toast('Payment date saved ✓');
+}
+
+function markPaid(blockId) {
+  const block = state.blocks.find(b => b.id === blockId);
+  if (!block) return;
+  block.paid = true;
+  if (!block.paidOn) block.paidOn = today();
+  save(); render();
+  toast('Payment marked as paid! 🎉');
+}
+
+function deleteBlock(blockId) {
+  if (!confirm('Remove this block?')) return;
+  state.blocks = state.blocks.filter(b => b.id !== blockId);
+  save(); render();
+}
+
+// ── Add block ─────────────────────────────────────────────────────────────────
+function renderAdd() {
+  return `
+  <div class="form-card">
+    <div class="form-title">New Training Block</div>
+    <div class="form-note">
+      📋 8 session slots will be created. Tap any session to mark it done — uses today's date by default. You can also pick a custom date on each session, and log the payment date on the block card.
+    </div>
+    <div class="form-group">
+      <label class="form-label">Cost (RON)</label>
+      <input class="form-input" id="f-cost" type="number" inputmode="decimal" placeholder="e.g. 400"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Label (optional)</label>
+      <input class="form-input" id="f-label" type="text" placeholder="e.g. June–July block"/>
+      <div class="form-hint">Helps you identify this block later</div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;padding:13px;font-size:13px" onclick="addBlock()">Create Block</button>
+  </div>`;
+}
+
+function addBlock() {
+  const cost = parseFloat(document.getElementById('f-cost').value);
+  const label = document.getElementById('f-label').value.trim();
+  if (!cost || isNaN(cost) || cost <= 0) { toast('Enter a valid cost', true); return; }
+
+  const block = {
+    id: 'b' + Date.now(),
+    cost,
+    label: label || 'Training block',
+    paid: false,
+    paidOn: null,
+    createdAt: today(),
+    sessions: Array.from({ length: 8 }, () => ({ done: false, date: '' }))
+  };
+  state.blocks.push(block);
+  save();
+  scheduleReminder(block);
+  toast('Block created! 8 sessions ready.');
+  showView('dashboard');
+}
+
+// ── Settings ──────────────────────────────────────────────────────────────────
+function renderSettings() {
+  const notifSupported = 'Notification' in window;
+  const notifStatus = !notifSupported ? 'Not supported' :
+    state.notifEnabled ? 'Enabled ✓' : 'Tap to enable';
+
+  return `
+  <div class="settings-card">
+    <div class="settings-row">
+      <div>
+        <div class="settings-title">Payment Reminders</div>
+        <div class="settings-desc">Browser notification reminder for upcoming payments.<br>Status: <strong style="color:#c8f060">${notifStatus}</strong></div>
+      </div>
+      ${notifSupported && !state.notifEnabled ? `<button class="btn btn-primary btn-sm" onclick="enableNotif()">Enable</button>` : ''}
+    </div>
+  </div>
+
+  ${state.notifEnabled ? `
+  <div class="settings-card">
+    <div class="settings-title" style="margin-bottom:10px">Remind me</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${[1,2,3,5].map(n => `<button class="btn btn-sm ${state.reminderDays===n?'btn-primary':'btn-ghost'}" onclick="setReminderDays(${n})">${n}d before</button>`).join('')}
+    </div>
+    <div class="form-hint" style="margin-top:10px">You'll be notified ${state.reminderDays} day(s) before your payment reminder date</div>
+  </div>` : ''}
+
+  <div class="settings-card">
+    <div class="settings-title" style="margin-bottom:8px">How to use on your phone</div>
+    <div class="settings-desc">
+      <strong style="color:#c8f060">Option A – Open directly:</strong> Save this HTML file to your phone and open it in Safari/Chrome. Use "Add to Home Screen" to make it feel like an app.<br><br>
+      <strong style="color:#c8f060">Option B – Deploy free online:</strong><br>
+      1. Go to <strong>vercel.com</strong> (free account)<br>
+      2. Drag & drop this HTML file<br>
+      3. Get a permanent URL like <em>traintrack.vercel.app</em><br>
+      4. Open on phone → Add to Home Screen<br><br>
+      All data is saved in your browser's local storage — no account needed.
+    </div>
+  </div>
+
+  <div class="settings-card" style="border-color:#2a1010">
+    <div class="settings-title" style="color:#c87070;margin-bottom:8px">Reset All Data</div>
+    <button class="btn btn-danger btn-sm" onclick="resetAll()">Clear Everything</button>
+  </div>`;
+}
+
+function enableNotif() {
+  if (!('Notification' in window)) { toast('Not supported in this browser', true); return; }
+  Notification.requestPermission().then(p => {
+    if (p === 'granted') { state.notifEnabled = true; save(); render(); toast('Notifications enabled!'); }
+    else { toast('Permission denied — check browser settings', true); }
+  });
+}
+
+function setReminderDays(n) { state.reminderDays = n; save(); render(); }
+
+function resetAll() {
+  if (!confirm('Delete ALL data? Cannot be undone.')) return;
+  state = dflt(); localStorage.removeItem(STORE); render(); toast('Data cleared.');
+}
+
+// ── Reminders ─────────────────────────────────────────────────────────────────
+function scheduleReminder(block) {
+  if (!state.notifEnabled) return;
+  const remindMs = state.reminderDays * 24 * 60 * 60 * 1000;
+  setTimeout(() => {
+    new Notification('💪 Trainer Payment Reminder', {
+      body: `Don't forget to pay for your "${block.label}" block (${block.cost} RON)!`,
+    });
+  }, remindMs);
+  toast(`Reminder set for ${state.reminderDays} day(s) from now`);
+}
+
+render();
+</script>
+</body>
+</html>
