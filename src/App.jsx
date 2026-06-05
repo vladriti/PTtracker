@@ -151,7 +151,7 @@ circle.fg { fill:none; stroke:var(--accent); stroke-width:5; stroke-linecap:roun
 .import-ta::placeholder { color:var(--text3); }
 
 .log-lbl { font-size:12px; color:var(--text2); margin-bottom:6px; font-weight:500; }
-.log-inp { width:100%; background:var(--surface2); border:1px solid var(--border2); border-radius:var(--rs); color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; padding:10px 14px; outline:none; margin-bottom:12px; color-scheme:dark; box-sizing:border-box; min-width:0; }
+.log-inp { width:100%; background:var(--surface2); border:1px solid var(--border2); border-radius:var(--rs); color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; padding:10px 14px; outline:none; margin-bottom:12px; color-scheme:dark; box-sizing:border-box; min-width:0; -webkit-appearance:none; display:block; }
 .log-inp:focus { border-color:var(--accent); }
 .type-row { display:flex; gap:8px; margin-bottom:12px; }
 .type-btn { flex:1; padding:9px 0; border-radius:var(--rs); border:1.5px solid var(--border2); background:transparent; color:var(--text2); font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; cursor:pointer; transition:all .15s; }
