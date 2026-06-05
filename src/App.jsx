@@ -498,6 +498,7 @@ export default function App() {
         </div>
 
         {tab === "overview" && (
+          <>
           <div className="hero">
               <div className="hero-row">
                 <div className="hero-card accent">
@@ -541,6 +542,7 @@ export default function App() {
                 </div>
               </div>
             </div>
+          </div>
             {nextSession && (
               <div className="next-banner">
                 <div>
@@ -555,6 +557,7 @@ export default function App() {
               {blocks.filter((bl, bi) => showOnOverview(bl, bi))
                 .map((bl) => <BlockCard key={bl.id} block={bl} bi={bl.id} highlight />)}
             </div>
+          </>
         )}
 
         {tab === "blocks" && (
