@@ -53,13 +53,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 .hero-card.accent .hero-num { color: #0a0a0a; }
 .hero-sub { font-size: 12px; color: var(--text3); margin-top: 4px; }
 .hero-card.accent .hero-sub { color: #3a5000; }
-.streak-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
-.streak-left { display: flex; align-items: center; gap: 12px; }
-.streak-flame { font-size: 28px; line-height: 1; }
-.streak-num { font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 800; color: var(--orange); line-height: 1; }
-.streak-label { font-size: 12px; color: var(--text2); margin-top: 2px; }
-.streak-best { font-size: 12px; color: var(--text3); text-align: right; }
-.streak-best span { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; color: var(--text2); }
+
 .ring-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; align-items: center; gap: 20px; margin-bottom: 10px; }
 .ring-wrap { flex-shrink: 0; position: relative; width: 72px; height: 72px; }
 .ring-wrap svg { transform: rotate(-90deg); }
@@ -213,32 +207,7 @@ function useLocalStorage(key, initial) {
   return [val, set];
 }
 
-function computeStreak(state, numBlocks) {
-  const doneDates = Object.keys(state.done).sort();
-  if (doneDates.length === 0) return { current: 0, best: 0 };
-  const allDates = getTueThuSchedule(START_DATE, SESSIONS_PER_BLOCK * numBlocks);
-  const today = new Date(); today.setHours(0, 0, 0, 0);
-  const outcomes = [];
-  for (let bi = 0; bi < numBlocks; bi++) {
-    for (let si = 0; si < SESSIONS_PER_BLOCK; si++) {
-      const slotKey = `${bi}-${si}`;
-      let d = allDates[bi * SESSIONS_PER_BLOCK + si];
-      if (state.reschedule?.[slotKey]) d = new Date(state.reschedule[slotKey] + "T00:00:00");
-      if (d > today) continue;
-      const k = dateKey(d);
-      if (state.done[k]) outcomes.push("done");
-      else if (state.skipped[k]) outcomes.push("skip");
-      else outcomes.push("none");
-    }
-  }
-  let current = 0, best = 0, run = 0;
-  for (const o of outcomes) {
-    if (o === "done") { run++; if (run > best) best = run; }
-    else { run = 0; }
-  }
-  current = run;
-  return { current, best };
-}
+
 
 // ── Weight chart (vanilla Canvas, no external dep) ───────────────────────
 function WeightChart({ entries }) {
@@ -558,8 +527,6 @@ export default function App() {
   const pct = totalSessions > 0 ? Math.round((totalDone / totalSessions) * 100) : 0;
   const circumference = 2 * Math.PI * 30;
   const dashOffset = circumference - (pct / 100) * circumference;
-  const streak = computeStreak(state, numBlocks);
-
   const nextSession = (() => {
     for (let bi = 0; bi < numBlocks; bi++)
       for (let si = 0; si < SESSIONS_PER_BLOCK; si++) {
@@ -817,19 +784,7 @@ export default function App() {
                   <div className="hero-sub">RON · {Math.round(totalPaid / PRICE_RON)} block{totalPaid / PRICE_RON !== 1 ? "s" : ""}</div>
                 </div>
               </div>
-              <div className="streak-card">
-                <div className="streak-left">
-                  <div className="streak-flame">{streak.current > 0 ? "🔥" : "💤"}</div>
-                  <div>
-                    <div className="streak-num">{streak.current}</div>
-                    <div className="streak-label">session streak</div>
-                  </div>
-                </div>
-                <div className="streak-best">
-                  Best streak
-                  <span>{streak.best}</span>
-                </div>
-              </div>
+              
               <div className="ring-card">
                 <div className="ring-wrap">
                   <svg width="72" height="72" viewBox="0 0 72 72">
